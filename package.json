@@ -1,0 +1,30 @@
+{
+  "name": "qanda",
+  "version": "1.0.0",
+  "description": "Questions and Answers Section",
+  "main": "aggregateQueries.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "build": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SDC-Paprika/QAndA.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SDC-Paprika/QAndA/issues"
+  },
+  "homepage": "https://github.com/SDC-Paprika/QAndA#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongodb": "^4.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
