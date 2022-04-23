@@ -56,7 +56,6 @@ const addQuestion = (q) => {
  * @return the modified question marked as helpful
  */
 const helpfulQuestion = (id, cb) => {
-  console.log('reached', id);
   questions.findOneAndUpdate({ id } , { $inc: { helpful: 1 }}, { returnDocument: 'after'},
     function(err, modifiedQuestion) {
       assert.equal(null, err);

@@ -7,7 +7,6 @@ const { getAllQuestions, addQuestion, helpfulQuestion, reportQuestion, addAnswer
 
 const PORT = process.env.PORT;
 
-
 app.get('/', (req, res) => {
   getAllQuestions(2, (data) => {
     res.send(data);
