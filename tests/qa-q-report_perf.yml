@@ -1,0 +1,25 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - name: Warm up
+      duration: 10
+      arrivalRate: 10
+    - name: Ramp up 1
+      duration: 5
+      arrivalRate: 10
+      rampTo: 100
+    - name: Ramp up 2
+      duration: 5
+      arrivalRate: 100
+      rampTo: 1000
+    - name: Load test
+      duration: 10
+      arrivalRate: 1000
+
+scenarios:
+  - name: "Report a question"
+    flow:
+      - put:
+          url: "/qa/q/report"
+          json:
+            question_id: "{{ $randomNumber(1, 3518973) }}"
