@@ -7,45 +7,45 @@ const { getAllQuestions, addQuestion, helpfulQuestion, reportQuestion, addAnswer
 
 const PORT = process.env.PORT;
 
-app.get('/', (req, res) => {
-  getAllQuestions(2, (data) => {
+app.get('/qa', (req, res) => {
+  getAllQuestions(req.query.product_id, (data) => {
     res.send(data);
   });
 });
 
-app.post('/question', (req, res) => {
-  addQuestion(_, (data) => {
+app.post('/qa/q/add', (req, res) => {
+  addQuestion(req.body, (data) => {
     res.send(data);
   });
 });
 
-app.post('/answer', (req, res) => {
-  addAnswer(_, (data) => {
+app.post('/qa/a/add', (req, res) => {
+  addAnswer(req.body, (data) => {
     res.send(data);
   });
 });
 
-app.put('/question/helpful', (req, res) => {
-  helpfulQuestion(2, (data) => {
+app.put('/qa/q/helpful', (req, res) => {
+  helpfulQuestion(req.body.question_id, (data) => {
     res.send(data);
   });
 })
 
 
-app.put('/answer/helpful', (req, res) => {
-  helpfulAnswer(2, 4, (data) => {
+app.put('/qa/a/helpful', (req, res) => {
+  helpfulAnswer(req.body.question_id, req.body.answer_id, (data) => {
     res.send(data);
   });
 })
 
-app.put('/question/report', (req, res) => {
-  reportQuestion(2, (data) => {
+app.put('/qa/q/report', (req, res) => {
+  reportQuestion(req.body.question_id, (data) => {
     res.send(data);
   });
 })
 
-app.put('/answer/report', (req, res) => {
-  reportAnswer(2, 4, (data) => {
+app.put('/qa/a/report', (req, res) => {
+  reportAnswer(req.body.question_id, req.body.answer_id, (data) => {
     res.send(data);
   });
 })

@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const assert = require('assert');
 
 // Connection URL
@@ -6,16 +6,96 @@ const url = 'mongodb://localhost:27017';
 // Database Name
 const dbName = 'sdcQA';
 // Create a new MongoClient
-const client = new MongoClient(url);
+const client = new MongoClient(url, {useUnifiedTopology: true});
 
 // Use connect method to connect to the Server
 client.connect(function(err, client) {
   assert.equal(null, err);
-  console.log("Connected correctly to server");
+  // console.log("Connected correctly to server");
 });
 
 const db = client.db(dbName);
 const questions = db.collection('questions');
+const answers = db.collection('answers');
+
+// db.runCommand({ collMod: 'questions',
+//   validator: { $jsonSchema: {
+//     bsonType: 'object',
+//     required: ['product_id', 'body', 'date_written', 'asker_name', 'asker_email', 'reported', 'helpful'],
+//     properties: {
+//       product_id: {
+//         bsonType: 'int',
+//         description: 'must be an integer and is required'
+//       },
+//       body: {
+//         bsonType: 'string',
+//         description: 'must be a string and is required'
+//       },
+//       date_written: {
+//         bsonType: 'date',
+//         description: 'must be a date and is required'
+//       },
+//       asker_name: {
+//         bsonType: 'string',
+//         description: 'must be a string and is required'
+//       },
+//       asker_email: {
+//         bsonType: 'string',
+//         description: 'must be a string and is required'
+//       },
+//       reported: {
+//         bsonType: 'bool',
+//         description: 'must be a boolean and is required'
+//       },
+//       helpful: {
+//         bsonType: 'int',
+//         description: 'must be an integer and is required'
+//         },
+//       answers: {
+//         bsonType: 'object',
+//         required: ['question_id', 'body', 'date_written', 'answerer_name', 'answerer_email', 'reported', 'helpful'],
+//         properties: {
+//           _id: {
+//             bsonType: 'objectId'
+//           },
+//           question_id: {
+//             bsonType: 'int',
+//             description: 'must be an integer and is required'
+//           },
+//           body: {
+//             bsonType: 'string',
+//             description: 'must be a string and is required'
+//           },
+//           date_written: {
+//             bsonType: 'date',
+//             description: 'must be a date and is required'
+//           },
+//           answerer_name: {
+//             bsonType: 'string',
+//             description: 'must be a string and is required'
+//           },
+//           answerer_email: {
+//             bsonType: 'string',
+//             description: 'must be a string and is required'
+//           },
+//           reported: {
+//             bsonType: 'bool',
+//             description: 'must be a boolean and is required'
+//           },
+//           helpful: {
+//             bsonType: 'int',
+//             description: 'must be an integer and is required'
+//           },
+//           photos: {
+//             bsonType: 'array'
+//           }
+//         }
+//       }
+//     }
+
+//   }},
+//     validationAction: 'warn'
+//   })
 
 /**
  * @return all the questions related to the product
@@ -28,10 +108,17 @@ const getAllQuestions = (product_id, cb) => {
   })
 }
 
+const getOneQuestion = (id, cb) => {
+  questions.find({ id }).next(function(err, question) {
+    assert.equal(null, err);
+    cb(question);
+  })
+}
+
 /**
  * Save a new question in the database
  */
-const addQuestion = (q) => {
+const addQuestion = (q, cb) => {
 
   questions.find().sort({ id: -1}).limit(1).next(function(err, question) {
     questions.insertOne({
@@ -44,7 +131,7 @@ const addQuestion = (q) => {
       reported: false,
       helpful: 0,
       answers: []
-    }, function(err) {
+    }, function(err, data) {
       assert.equal(null, err);
       cb('1 question added');
     })
@@ -59,7 +146,6 @@ const helpfulQuestion = (id, cb) => {
   questions.findOneAndUpdate({ id } , { $inc: { helpful: 1 }}, { returnDocument: 'after'},
     function(err, modifiedQuestion) {
       assert.equal(null, err);
-      console.log(modifiedQuestion);
       cb(modifiedQuestion);
     }
   )
@@ -82,12 +168,10 @@ const reportQuestion = (id, cb) => {
  * @return the question with the new answer added to it
  */
 const addAnswer = (a, cb) => {
-  let lastIndex = 6879306;
-  lastIndex += 1;
   questions.findOneAndUpdate({ id: a.question_id },
     { $push: {
       answers: {
-        id: lastIndex,
+        _id: ObjectId(),
         question_id: a.question_id,
         body: a.body,
         date_written: new Date(),
@@ -99,6 +183,7 @@ const addAnswer = (a, cb) => {
       }
     }},
   { returnDocument: 'after'}, function(err, qNewAnswer) {
+    assert.equal(null, err);
     cb(qNewAnswer);
   })
 }
@@ -109,8 +194,9 @@ const addAnswer = (a, cb) => {
  */
 const helpfulAnswer = (q_id, a_id, cb) => {
 
-  questions.findOneAndUpdate({ id: q_id, 'answers.id': a_id }, { $inc: { 'answers.$.helpful': 1} }, { returnDocument: 'after' },
+  questions.findOneAndUpdate({ id: q_id, 'answers._id': ObjectId(a_id) }, { $inc: { 'answers.$.helpful': 1} }, { returnDocument: 'after' },
     function(err, modifiedQuestion) {
+      assert.equal(null, err);
       cb(modifiedQuestion);
     }
   )
@@ -121,7 +207,8 @@ const helpfulAnswer = (q_id, a_id, cb) => {
  * @return the modified question with the reported answer
  */
 const reportAnswer = (q_id, a_id, cb) => {
-  questions.findOneAndUpdate({ id: q_id, 'answers.id': a_id }, { $set: { 'answers.$.reported': true } }, { returnDocument: 'after' }, function(err, modifiedQuestion) {
+  questions.findOneAndUpdate({ id: q_id, 'answers._id': ObjectId(a_id) }, { $set: { 'answers.$.reported': true } }, { returnDocument: 'after' }, function(err, modifiedQuestion) {
+    assert.equal(null, err);
     cb(modifiedQuestion);
   })
 }
@@ -133,6 +220,7 @@ exports.reportQuestion = reportQuestion;
 exports.addAnswer = addAnswer;
 exports.helpfulAnswer = helpfulAnswer;
 exports.reportAnswer = reportAnswer;
+exports.getOneQuestion = getOneQuestion;
 
 
 //TESTING
@@ -145,7 +233,10 @@ exports.reportAnswer = reportAnswer;
 //   product_id: 50,
 // });
 
-// helpfulQuestion(3518964);
+// helpfulQuestion(3518965);
+// reportQuestion(3518965, (data) => {
+//   console.log(data);
+// });
 
 // addAnswer({
 //   question_id: 3518964,
@@ -153,6 +244,8 @@ exports.reportAnswer = reportAnswer;
 //   name: 'nickName',
 //   email: 'email',
 //   photos: ['1', '2']
+// }, (data) => {
+//   // console.log(data);
 // })
 
 // reportAnswer(3518964, 6879307);

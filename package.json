@@ -4,9 +4,10 @@
   "description": "Questions and Answers Section",
   "main": "aggregateQueries.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config ./jest.config.js --forceExit",
+    "testwatch": "jest --watchAll --config ./jest.config.js --forceExit",
     "start": "node server.js",
-    "build": "nodemon server.js"
+    "build-dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "mongodb": "^4.5.0"
   },
   "devDependencies": {
+    "jest": "^27.5.1",
     "nodemon": "^2.0.15"
   }
 }
