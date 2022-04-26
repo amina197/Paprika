@@ -108,6 +108,9 @@ const getAllQuestions = (product_id, cb) => {
   })
 }
 
+// getAllQuestions(50, )
+
+
 const getOneQuestion = (id, cb) => {
   questions.find({ id }).next(function(err, question) {
     assert.equal(null, err);
@@ -118,12 +121,12 @@ const getOneQuestion = (id, cb) => {
 /**
  * Save a new question in the database
  */
-const addQuestion = (q, cb) => {
+const addQuestion = (q, product_id, cb) => {
 
   questions.find().sort({ id: -1}).limit(1).next(function(err, question) {
     questions.insertOne({
       id: question.id + 1,
-      product_id: q.product_id,
+      product_id,
       body: q.body,
       date_written: new Date(),
       asker_name: q.name,

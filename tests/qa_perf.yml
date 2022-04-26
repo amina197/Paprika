@@ -15,9 +15,10 @@ config:
     - name: Load test
       duration: 10
       arrivalRate: 1000
+      # // 1 thousand new users created every second during ten seconds
 
 scenarios:
   - name: "Get all questions"
     flow:
       - get:
-          url: "/qa?product_id={{$randomNumber(1, 10000)}}"
+          url: "/qa/{{$randomNumber(1, 10000)}}"
