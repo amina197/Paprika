@@ -30,12 +30,11 @@ describe('addQuestion', () => {
     }
 
     const q = {
-      body: 'hey body, you look good today',
+      body: 'hello',
       name: 'tata',
       email: 'tata@gmail.com',
-      product_id: 879
     }
-    addQuestion(q, callback);
+    addQuestion(q, 879, callback);
   })
 });
 

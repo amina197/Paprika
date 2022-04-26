@@ -20,6 +20,6 @@ scenarios:
   - name: "Add a new question"
     flow:
       - post:
-          url: "/qa/q/add"
+          url: "/qa/50/q/add"
           json:
-            body: "{ body: 'body', name: 'name', email: 'email', product_id: 50 }"
+            body: "{{ body: 'body', name: 'name', email: 'email' }}"
