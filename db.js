@@ -1,8 +1,9 @@
 const { MongoClient, ObjectId } = require('mongodb');
 const assert = require('assert');
+require('dotenv').config();
 
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@localhost:27017`;
 // Database Name
 const dbName = 'sdcQA';
 // Create a new MongoClient
@@ -107,8 +108,6 @@ const getAllQuestions = (product_id, cb) => {
     cb(productQuestions);
   })
 }
-
-// getAllQuestions(50, )
 
 
 const getOneQuestion = (id, cb) => {
