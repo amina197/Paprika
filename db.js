@@ -3,7 +3,7 @@ const assert = require('assert');
 require('dotenv').config();
 
 // Connection URL
-const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@localhost:27017`;
+const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.ENV.DB_HOST}:27017`;
 // Database Name
 const dbName = 'sdcQA';
 // Create a new MongoClient
@@ -18,85 +18,6 @@ client.connect(function(err, client) {
 const db = client.db(dbName);
 const questions = db.collection('questions');
 const answers = db.collection('answers');
-
-// db.runCommand({ collMod: 'questions',
-//   validator: { $jsonSchema: {
-//     bsonType: 'object',
-//     required: ['product_id', 'body', 'date_written', 'asker_name', 'asker_email', 'reported', 'helpful'],
-//     properties: {
-//       product_id: {
-//         bsonType: 'int',
-//         description: 'must be an integer and is required'
-//       },
-//       body: {
-//         bsonType: 'string',
-//         description: 'must be a string and is required'
-//       },
-//       date_written: {
-//         bsonType: 'date',
-//         description: 'must be a date and is required'
-//       },
-//       asker_name: {
-//         bsonType: 'string',
-//         description: 'must be a string and is required'
-//       },
-//       asker_email: {
-//         bsonType: 'string',
-//         description: 'must be a string and is required'
-//       },
-//       reported: {
-//         bsonType: 'bool',
-//         description: 'must be a boolean and is required'
-//       },
-//       helpful: {
-//         bsonType: 'int',
-//         description: 'must be an integer and is required'
-//         },
-//       answers: {
-//         bsonType: 'object',
-//         required: ['question_id', 'body', 'date_written', 'answerer_name', 'answerer_email', 'reported', 'helpful'],
-//         properties: {
-//           _id: {
-//             bsonType: 'objectId'
-//           },
-//           question_id: {
-//             bsonType: 'int',
-//             description: 'must be an integer and is required'
-//           },
-//           body: {
-//             bsonType: 'string',
-//             description: 'must be a string and is required'
-//           },
-//           date_written: {
-//             bsonType: 'date',
-//             description: 'must be a date and is required'
-//           },
-//           answerer_name: {
-//             bsonType: 'string',
-//             description: 'must be a string and is required'
-//           },
-//           answerer_email: {
-//             bsonType: 'string',
-//             description: 'must be a string and is required'
-//           },
-//           reported: {
-//             bsonType: 'bool',
-//             description: 'must be a boolean and is required'
-//           },
-//           helpful: {
-//             bsonType: 'int',
-//             description: 'must be an integer and is required'
-//           },
-//           photos: {
-//             bsonType: 'array'
-//           }
-//         }
-//       }
-//     }
-
-//   }},
-//     validationAction: 'warn'
-//   })
 
 /**
  * @return all the questions related to the product
@@ -225,30 +146,85 @@ exports.reportAnswer = reportAnswer;
 exports.getOneQuestion = getOneQuestion;
 
 
-//TESTING
-//getAllQuestions(5);
 
-// addQuestion({
-//   body: 'questionBody',
-//   name: 'nickName',
-//   email: 'email',
-//   product_id: 50,
-// });
 
-// helpfulQuestion(3518965);
-// reportQuestion(3518965, (data) => {
-//   console.log(data);
-// });
+// VALIDATORS
 
-// addAnswer({
-//   question_id: 3518964,
-//   body: 'answerBody',
-//   name: 'nickName',
-//   email: 'email',
-//   photos: ['1', '2']
-// }, (data) => {
-//   // console.log(data);
-// })
+// db.command({ collMod: 'questions',
+//   validator: { $jsonSchema: {
+//     bsonType: 'object',
+//     required: ['product_id', 'body', 'date_written', 'asker_name', 'asker_email', 'reported', 'helpful'],
+//     properties: {
+//       product_id: {
+//         bsonType: 'int',
+//         description: 'must be an integer and is required'
+//       },
+//       body: {
+//         bsonType: 'string',
+//         description: 'must be a string and is required'
+//       },
+//       date_written: {
+//         bsonType: 'date',
+//         description: 'must be a date and is required'
+//       },
+//       asker_name: {
+//         bsonType: 'string',
+//         description: 'must be a string and is required'
+//       },
+//       asker_email: {
+//         bsonType: 'string',
+//         description: 'must be a string and is required'
+//       },
+//       reported: {
+//         bsonType: 'bool',
+//         description: 'must be a boolean and is required'
+//       },
+//       helpful: {
+//         bsonType: 'int',
+//         description: 'must be an integer and is required'
+//         },
+//       answers: {
+//         bsonType: 'object',
+//         required: ['question_id', 'body', 'date_written', 'answerer_name', 'answerer_email', 'reported', 'helpful'],
+//         properties: {
+//           _id: {
+//             bsonType: 'objectId'
+//           },
+//           question_id: {
+//             bsonType: 'int',
+//             description: 'must be an integer and is required'
+//           },
+//           body: {
+//             bsonType: 'string',
+//             description: 'must be a string and is required'
+//           },
+//           date_written: {
+//             bsonType: 'date',
+//             description: 'must be a date and is required'
+//           },
+//           answerer_name: {
+//             bsonType: 'string',
+//             description: 'must be a string and is required'
+//           },
+//           answerer_email: {
+//             bsonType: 'string',
+//             description: 'must be a string and is required'
+//           },
+//           reported: {
+//             bsonType: 'bool',
+//             description: 'must be a boolean and is required'
+//           },
+//           helpful: {
+//             bsonType: 'int',
+//             description: 'must be an integer and is required'
+//           },
+//           photos: {
+//             bsonType: 'array'
+//           }
+//         }
+//       }
+//     }
 
-// reportAnswer(3518964, 6879307);
-// helpfulAnswer(3518964, 6879307);
+//   }},
+//     validationAction: 'warn'
+//   })
