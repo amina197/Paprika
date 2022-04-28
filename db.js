@@ -3,7 +3,7 @@ const assert = require('assert');
 require('dotenv').config();
 
 // Connection URL
-const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.ENV.DB_HOST}:27017`;
+const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:27017`;
 // Database Name
 const dbName = 'sdcQA';
 // Create a new MongoClient
