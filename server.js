@@ -5,7 +5,7 @@ app.use(express.json());
 
 const { getAllQuestions, addQuestion, helpfulQuestion, reportQuestion, addAnswer, helpfulAnswer, reportAnswer } = require('./db.js');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 app.get('/qa/:productId', (req, res) => {
   getAllQuestions(Number(req.params.productId), (data) => {
