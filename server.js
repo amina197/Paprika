@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.json());
-app.use('/static', express.static(__dirname + '/dist'));
+app.use(express.static(path.join(__dirname, '/dist'));
 
 const { getAllQuestions, addQuestion, helpfulQuestion, reportQuestion, addAnswer, helpfulAnswer, reportAnswer } = require('./db.js');
 
