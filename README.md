@@ -12,3 +12,4 @@ Backend system for a Questions and Answers Section of an e-commerce website buil
 ![AWS EC2](https://img.shields.io/badge/-AWS-232F3E?logo=amazonaws&logoColor=white&style=for-the-badge)
 ![Loader.io](https://img.shields.io/badge/-Loader.io-5379B9?logo=loader.io&logoColor=white&style=for-the-badge)
 ![Artillery.io](https://img.shields.io/badge/-Artillery.io-202020?logo=artillery.io&logoColor=white&style=for-the-badge)
+![NGINX](https://img.shields.io/badge/-NGINX-009639?logo=nginx&logoColor=white&style=for-the-badge)
